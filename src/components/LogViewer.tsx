@@ -1,13 +1,9 @@
 import { useState, useEffect, useCallback, useReducer } from 'react';
 
-import type { LogEntry } from '@/types/log.types';
+import type { LogEntry } from '@/types/logs';
 import { LogService } from '@/services/log-service';
-import styles from '../assets/styles/LogViewer.module.css';
-import { LogTable } from './LogTable';
-
-export interface LogViewerProps {
-  url?: string;
-}
+import styles from '@/assets/styles/LogViewer.module.css';
+import { LogTable } from '@/components/LogTable';
 
 export function LogViewer({ url }: { url: string }) {
   const logService = new LogService()
@@ -15,9 +11,6 @@ export function LogViewer({ url }: { url: string }) {
 
   useEffect(() => {
     loadLogs(url);
-    // console.log("logsData:", logsData);
-
-
   }, []);
 
   const handleLogsChunk = useCallback((logs: LogEntry[]) => {

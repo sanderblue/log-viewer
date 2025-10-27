@@ -1,6 +1,6 @@
 import { memo, useRef } from 'react';
 
-import styles from '../assets/styles/LogTable.module.css';
+import styles from '@/assets/styles/LogTable.module.css';
 
 export function LogTableComponent({ logs }: { logs: any[] }) {
   const tableRef = useRef<HTMLDivElement>(null);
