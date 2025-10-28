@@ -15,7 +15,7 @@
   border-bottom: 2px solid black;
   z-index: 10;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
 }
 
 .headerTimestamp {
@@ -36,7 +36,7 @@
   overflow-x: hidden;
   position: relative;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
 .row {
@@ -72,7 +72,7 @@
   padding: 0.5rem 1rem;
   background: #f8f8f8;
   border-top: 1px solid black;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: #666;
 }
 
@@ -128,10 +128,14 @@
   }
 
   .header {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
 
   .scrollContainer {
+    font-size: 0.85rem;
+  }
+
+  .statusBar {
     font-size: 0.8rem;
   }
 }

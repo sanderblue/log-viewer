@@ -16,6 +16,7 @@ export function LogViewer({ url }: { url: string }) {
   // Load logs on mount and when URL changes
   useEffect(() => {
     if (!url) {
+      console.error('No logs URL provided');
       return;
     }
 
@@ -76,7 +77,7 @@ export function LogViewer({ url }: { url: string }) {
           <VirtualizedLogTable
             logs={logs}
             containerHeight={600}
-            rowHeight={30}
+            rowHeight={24}
             overscan={5}
           />
         ) : (
