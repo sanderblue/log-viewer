@@ -7,8 +7,7 @@
 
 .logTable {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9rem;
 }
@@ -16,19 +15,18 @@
 .tableHeader {
   position: sticky;
   top: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: white;
   z-index: 10;
+  border-bottom: 2px solid black;
 }
 
 .tableHeader th {
   padding: 1rem;
   text-align: left;
-  color: white;
+  color: black;
   font-weight: 600;
   font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid black;
 }
 
 .timestampHeader {
@@ -38,6 +36,22 @@
 
 .eventHeader {
   width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Apply no-wrap to event column cells */
+.logTable tbody td:nth-child(2) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+}
+
+.logTable tbody td {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .loadingContainer {
@@ -52,20 +66,9 @@
 .spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid rgba(102, 126, 234, 0.1);
-  border-top-color: #667eea;
+  border: 4px solid #e0e0e0;
+  border-top-color: black;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .loadingContainer p {
@@ -91,12 +94,7 @@
   border-top: 1px solid #e0e0e0;
 }
 
-/* Smooth scrolling */
-.tableContainer {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
+/* Simple scrollbar */
 .tableContainer::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -104,22 +102,14 @@
 
 .tableContainer::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 10px;
 }
 
 .tableContainer::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
+  background: #888;
 }
 
 .tableContainer::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5a72e8 0%, #6a4198 100%);
-}
-
-/* For Firefox */
-.tableContainer {
-  scrollbar-width: thin;
-  scrollbar-color: #667eea #f1f1f1;
+  background: #555;
 }
 
 @media (max-width: 768px) {

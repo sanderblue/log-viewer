@@ -1,54 +1,89 @@
-import { useState, useEffect, useCallback, useReducer } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import type { LogEntry } from '@/types/logs';
 import { LogService } from '@/services/log-service';
 import styles from '@/assets/styles/LogViewer.module.css';
-import { LogTable } from '@/components/LogTable';
+import { VirtualizedLogTable } from '@/components/VirtualizedLogTable';
 
 export function LogViewer({ url }: { url: string }) {
-  const logService = new LogService()
-  const [logs, setLogs] = useState<LogEntry[]>([])
+  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
+  // Create logService instance once
+  const logService = useMemo(() => new LogService(), []);
+
+  // Load logs on mount and when URL changes
   useEffect(() => {
-    loadLogs(url);
-  }, []);
-
-  const handleLogsChunk = useCallback((logs: LogEntry[]) => {
-    // console.log("logs:", logs);
-    setLogs(logs)
-    // setLogs((prevLogs) => [...prevLogs, ...logs]);
-  }, []);
-
-  const loadLogs = useCallback(async (url: string) => {
     if (!url) {
-      return
+      return;
     }
 
-    try {
-      const data = await logService.streamLogs(url, {
-        onChunk: handleLogsChunk,
-      });
+    let isCancelled = false;
 
-      console.log("data:", data);
+    const loadLogs = async () => {
+      // Reset state
+      setLogs([]);
+      setLoading(true);
+      setError(null);
 
-      setLogs(data);
+      try {
+        await logService.streamLogs(url, {
+          onChunk: (newLogs: LogEntry[]) => {
+            if (!isCancelled) {
+              setLogs((prevLogs) => [...prevLogs, ...newLogs]);
+            }
+          },
+        });
+      } catch (error) {
+        if (!isCancelled) {
+          console.error('Failed to load logs:', error);
+          setError(error instanceof Error ? error.message : 'Failed to load logs');
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      }
+    };
 
-    } catch (error) {
-      console.error('Failed to load logs:', error);
-    }
-  }, []);
+    loadLogs();
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isCancelled = true;
+    };
+  }, [url, logService]); // Only depend on url and logService
 
   return (
-    <div>
-      <h1>Logs</h1>
-      <div>
-        <div className={styles.tableWrapper}>
-          <LogTable logs={logs} />
+    <div className={styles.logViewerContainer}>
+      <div className={styles.header}>
+        <h1>Log Viewer</h1>
+        <div className={styles.stats}>
+          <span>Total Logs: {logs.length}</span>
+          {loading && <span>Loading...</span>}
         </div>
+      </div>
 
-        {logs.map((log: LogEntry, index: number) => (
-          <div key={index}>{log.message}</div>
-        ))}
+      {error && (
+        <div className={styles.error}>
+          Error: {error}
+        </div>
+      )}
+
+      <div className={styles.tableWrapper}>
+        {logs.length > 0 ? (
+          <VirtualizedLogTable
+            logs={logs}
+            containerHeight={600}
+            rowHeight={30}
+            overscan={5}
+          />
+        ) : (
+          <div className={styles.emptyState}>
+            {loading ? 'Loading logs...' : 'No logs to display'}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,28 +3,23 @@
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: white;
   padding: 1rem;
   box-sizing: border-box;
 }
 
 .header {
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 12px;
+  background: white;
+  border: 1px solid black;
   padding: 1.5rem;
   margin-bottom: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .header h1 {
   margin: 0 0 1rem 0;
-  color: #333;
+  color: black;
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .controls {
@@ -44,16 +39,14 @@
 .urlInput input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 2px solid black;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  background: white;
 }
 
 .urlInput input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: black;
 }
 
 .urlInput input:disabled {
@@ -65,27 +58,23 @@
 .sampleButton,
 .downloadButton {
   padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
+  border: 2px solid black;
+  background: white;
+  color: black;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.loadButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.loadButton:hover:not(:disabled),
+.sampleButton:hover:not(:disabled),
+.downloadButton:hover:not(:disabled) {
+  background: black;
   color: white;
 }
 
-.loadButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-.loadButton:disabled {
+.loadButton:disabled,
+.sampleButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -95,82 +84,55 @@
   gap: 0.5rem;
 }
 
-.sampleButton {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-}
-
-.sampleButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
-}
-
-.downloadButton {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  color: white;
-}
-
-.downloadButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
-}
-
 .error {
-  background: #ff6b6b;
+  background: black;
   color: white;
   padding: 1rem;
-  border-radius: 8px;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
-  animation: slideInFromTop 0.3s ease;
-}
-
-@keyframes slideInFromTop {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .stats {
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 8px;
+  background: white;
+  border: 1px solid black;
   padding: 1rem;
   margin-bottom: 1rem;
   display: flex;
   gap: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .stats span {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #666;
+  color: black;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .stats span:first-child {
-  color: #333;
+  color: black;
   font-size: 1rem;
 }
 
 .tableWrapper {
   flex: 1;
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 12px;
+  background: white;
+  border: 1px solid black;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   min-height: 0;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #999;
+  font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {

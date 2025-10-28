@@ -44,16 +44,23 @@ export class LogService {
     }
   }
 
-  async streamLogs(url: string, options: StreamingOptions): Promise<LogEntry[]> {
+  async streamLogs(url: string, options: StreamingOptions): Promise<void> {
     const stream = await this.getLogsStream(url);
     const reader = stream.getReader();
-    const allLogs: LogEntry[] = [];
 
     try {
       while (true) {
         const { done, value } = await reader.read();
 
         if (done) {
+          // Process any remaining buffer data
+          if (this.buffer.trim()) {
+            const finalLog = this.parseLine(this.buffer);
+            if (finalLog) {
+              options.onChunk([finalLog]);
+            }
+            this.buffer = '';
+          }
           break;
         }
 
@@ -61,17 +68,15 @@ export class LogService {
         const logs = this.processChunk(chunk);
 
         if (logs.length > 0) {
-          allLogs.push(...logs);
           options.onChunk(logs);
         }
       }
-
-      return allLogs;
     } catch (error) {
       console.error('Error streaming logs:', error);
       throw error;
     } finally {
       reader.releaseLock();
+      this.buffer = ''; // Clear buffer on completion or error
     }
   }
 

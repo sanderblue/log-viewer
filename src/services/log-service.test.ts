@@ -46,13 +46,15 @@ describe('LogService', () => {
       // globalThis.fetch = vi.fn().mockResolvedValue(mockResponse);
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue(mockResponse));
 
-      const logs = await logService.streamLogs('http://test.com/logs', {
-        onChunk: vi.fn(),
+      const onChunk = vi.fn();
+      await logService.streamLogs('http://test.com/logs', {
+        onChunk,
       });
 
-      expect(logs.length).toBeGreaterThan(0);
-      expect(logs[0].message).toBe('test1');
-      expect(logs[1].message).toBe('test2');
+      expect(onChunk).toHaveBeenCalled();
+      expect(onChunk).toHaveBeenCalledTimes(2);
+      expect(onChunk.mock.calls[0][0][0].message).toBe('test1');
+      expect(onChunk.mock.calls[1][0][0].message).toBe('test2');
     });
   });
 });
