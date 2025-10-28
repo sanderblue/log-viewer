@@ -1,0 +1,98 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+  position: relative;
+}
+
+.rowClickable {
+  cursor: pointer;
+}
+
+.rowClickable:hover {
+  background: #f5f5f5;
+}
+
+.rowHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 24px;
+}
+
+.lineNumber {
+  min-width: 50px;
+  padding: 0.25rem 0.5rem;
+  text-align: right;
+  color: #999;
+  user-select: none;
+  border-right: 1px solid #e0e0e0;
+  font-size: 0.7rem;
+}
+
+.caret {
+  display: inline-block;
+  margin-left: 8px;
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+  font-size: 10px;
+  color: #666;
+}
+
+.caretRotated {
+  transform: rotate(90deg);
+}
+
+.timestamp {
+  width: 200px;
+  min-width: 200px;
+  padding: 0.25rem 1rem;
+  border-right: 1px solid #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event {
+  flex: 1;
+  padding: 0.25rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expandedContent {
+  width: 100%;
+  padding: 1rem;
+  background: #f8f8f8;
+  border-top: 1px solid #e0e0e0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.jsonContent {
+  margin: 0;
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Responsive design for row elements */
+@media (max-width: 768px) {
+  .lineNumber {
+    min-width: 40px;
+    padding: 0.25rem;
+  }
+
+  .timestamp {
+    width: 150px;
+    min-width: 150px;
+  }
+}

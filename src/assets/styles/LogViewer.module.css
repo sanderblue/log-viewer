@@ -24,68 +24,6 @@
   font-weight: 700;
 }
 
-.controls {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.urlInput {
-  display: flex;
-  gap: 0.5rem;
-  flex: 1;
-  min-width: 300px;
-}
-
-.urlInput input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 2px solid black;
-  font-size: 1rem;
-  background: white;
-}
-
-.urlInput input:focus {
-  outline: none;
-  border-color: black;
-}
-
-.urlInput input:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-}
-
-.loadButton,
-.sampleButton,
-.downloadButton {
-  padding: 0.75rem 1.5rem;
-  border: 2px solid black;
-  background: white;
-  color: black;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.loadButton:hover:not(:disabled),
-.sampleButton:hover:not(:disabled),
-.downloadButton:hover:not(:disabled) {
-  background: black;
-  color: white;
-}
-
-.loadButton:disabled,
-.sampleButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.sampleControls {
-  display: flex;
-  gap: 0.5rem;
-}
-
 .error {
   background: black;
   color: white;

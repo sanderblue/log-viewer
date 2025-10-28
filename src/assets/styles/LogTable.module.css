@@ -1,129 +1,105 @@
-.tableContainer {
-  flex: 1;
-  overflow: auto;
-  position: relative;
-  min-height: 0;
-}
-
-.logTable {
+.virtualizedContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: 100%;
-  border-collapse: collapse;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.9rem;
+  background: white;
 }
 
-.tableHeader {
+.header {
+  display: flex;
   position: sticky;
   top: 0;
   background: white;
-  z-index: 10;
-  border-bottom: 2px solid black;
-}
-
-.tableHeader th {
-  padding: 1rem;
-  text-align: left;
-  color: black;
-  font-weight: 600;
-  font-size: 0.95rem;
   border-bottom: 1px solid black;
+  z-index: 10;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
-.timestampHeader {
+.headerLineNumber {
+  min-width: 50px;
+  padding: 1rem 0.5rem;
+  text-align: right;
+  border-right: 1px solid black;
+}
+
+.headerTimestamp {
   width: 200px;
   min-width: 200px;
-}
-
-.eventHeader {
-  width: auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Apply no-wrap to event column cells */
-.logTable tbody td:nth-child(2) {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 0;
-}
-
-.logTable tbody td {
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.loadingContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 400px;
-  gap: 1rem;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #e0e0e0;
-  border-top-color: black;
-  border-radius: 50%;
-}
-
-.loadingContainer p {
-  color: #666;
-  font-size: 1rem;
-}
-
-.emptyState {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 400px;
-  color: #999;
-  font-size: 1.1rem;
-}
-
-.loadingMore {
   padding: 1rem;
-  text-align: center;
+  border-right: 1px solid black;
+}
+
+.headerEvent {
+  flex: 1;
+  padding: 1rem;
+}
+
+.scrollContainer {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.75rem;
+}
+
+.statusBar {
+  padding: 0.5rem 1rem;
   background: #f8f8f8;
+  border-top: 1px solid black;
+  font-size: 0.75rem;
   color: #666;
-  font-size: 0.9rem;
-  border-top: 1px solid #e0e0e0;
 }
 
 /* Simple scrollbar */
-.tableContainer::-webkit-scrollbar {
+.scrollContainer::-webkit-scrollbar {
   width: 10px;
-  height: 10px;
 }
 
-.tableContainer::-webkit-scrollbar-track {
+.scrollContainer::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
-.tableContainer::-webkit-scrollbar-thumb {
+.scrollContainer::-webkit-scrollbar-thumb {
   background: #888;
 }
 
-.tableContainer::-webkit-scrollbar-thumb:hover {
+.scrollContainer::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
+/* For Firefox */
+.scrollContainer {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
-  .timestampHeader {
+
+  .headerLineNumber,
+  .lineNumber {
+    min-width: 40px;
+    padding: 0.25rem;
+  }
+
+  .headerTimestamp,
+  .timestamp {
     width: 150px;
     min-width: 150px;
   }
 
-  .logTable {
-    font-size: 0.8rem;
+  .header {
+    font-size: 0.9rem;
   }
 
-  .tableHeader th {
-    padding: 0.75rem;
+  .scrollContainer {
     font-size: 0.85rem;
+  }
+
+  .statusBar {
+    font-size: 0.8rem;
   }
 }
