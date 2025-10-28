@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import type { LogEntry } from '@/types/logs';
 import { LogService } from '@/services/log-service';
 import styles from '@/assets/styles/LogViewer.module.css';
-import { VirtualizedLogTable } from '@/components/VirtualizedLogTable';
+import { LogTable } from '@/components/LogTable';
 
 export function LogViewer({ url }: { url: string }) {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -74,7 +74,7 @@ export function LogViewer({ url }: { url: string }) {
 
       <div className={styles.tableWrapper}>
         {logs.length > 0 ? (
-          <VirtualizedLogTable
+          <LogTable
             logs={logs}
             containerHeight={600}
             rowHeight={24}
