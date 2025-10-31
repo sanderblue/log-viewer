@@ -15,14 +15,14 @@
 }
 
 .rowHeader {
-  display: flex;
+  display: grid;
+  grid-template-columns: 50px 26px 200px 1fr;
   align-items: center;
   width: 100%;
   min-height: 24px;
 }
 
 .lineNumber {
-  min-width: 50px;
   padding: 0.25rem 0.5rem;
   text-align: right;
   color: #999;
@@ -32,9 +32,9 @@
 }
 
 .caret {
-  display: inline-block;
-  margin-left: 8px;
-  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.2s ease;
   font-size: 10px;
   color: #666;
@@ -45,8 +45,6 @@
 }
 
 .timestamp {
-  width: 200px;
-  min-width: 200px;
   padding: 0.25rem 1rem;
   border-right: 1px solid #e0e0e0;
   white-space: nowrap;
@@ -55,7 +53,6 @@
 }
 
 .event {
-  flex: 1;
   padding: 0.25rem 1rem;
   white-space: nowrap;
   overflow: hidden;

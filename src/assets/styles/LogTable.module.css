@@ -7,7 +7,8 @@
 }
 
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 50px 26px 200px 1fr;
   position: sticky;
   top: 0;
   background: white;
@@ -18,21 +19,22 @@
 }
 
 .headerLineNumber {
-  min-width: 50px;
   padding: 1rem 0.5rem;
   text-align: right;
   border-right: 1px solid black;
 }
 
+.headerCaretSpace {
+  /* Empty space for caret alignment */
+  border-right: none;
+}
+
 .headerTimestamp {
-  width: 200px;
-  min-width: 200px;
   padding: 1rem;
   border-right: 1px solid black;
 }
 
 .headerEvent {
-  flex: 1;
   padding: 1rem;
 }
 

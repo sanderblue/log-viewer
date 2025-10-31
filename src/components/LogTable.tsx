@@ -150,6 +150,7 @@ function LogTableComponent({ logs, rowHeight = 24, containerHeight = 600, oversc
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerLineNumber}>#</div>
+        <div className={styles.headerCaretSpace}></div>
         <div className={styles.headerTimestamp}>Timestamp</div>
         <div className={styles.headerEvent}>Event</div>
       </div>
