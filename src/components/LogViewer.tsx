@@ -76,7 +76,6 @@ export function LogViewer({ url }: { url: string }) {
         {logs.length > 0 ? (
           <LogTable
             logs={logs}
-            containerHeight={600}
             rowHeight={24}
             overscan={5}
           />

@@ -6,13 +6,13 @@ import styles from '@/assets/styles/LogTable.module.css';
 interface LogTableProps {
   logs: LogEntry[];
   rowHeight?: number;
-  containerHeight?: number;
   overscan?: number;
 }
 
-function LogTableComponent({ logs, rowHeight = 24, containerHeight = 600, overscan = 5 }: LogTableProps) {
+function LogTableComponent({ logs, rowHeight = 24, overscan = 5 }: LogTableProps) {
   const [scrollTop, setScrollTop] = useState(0);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [actualContainerHeight, setActualContainerHeight] = useState(600); // Track actual height
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const animationFrameRef = useRef<number | undefined>(undefined);
@@ -20,6 +20,32 @@ function LogTableComponent({ logs, rowHeight = 24, containerHeight = 600, oversc
   // Heights for normal and expanded rows
   const expandedRowHeight = 400;
   const normalRowHeight = rowHeight;
+
+  // Update container height on mount and resize
+  useEffect(() => {
+    const updateHeight = () => {
+      if (containerRef.current) {
+        setActualContainerHeight(containerRef.current.clientHeight);
+      }
+    };
+
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+
+    // Use ResizeObserver if available for more accurate updates
+    let resizeObserver: ResizeObserver | null = null;
+    if (containerRef.current && 'ResizeObserver' in window) {
+      resizeObserver = new ResizeObserver(updateHeight);
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    };
+  }, []);
 
   // Calculate total height for virtual spacer accounting for expanded row
   const totalHeight = useMemo(() => {
@@ -46,7 +72,8 @@ function LogTableComponent({ logs, rowHeight = 24, containerHeight = 600, oversc
         foundStart = true;
       }
 
-      if (currentHeight > scrollTop + containerHeight + (overscan * normalRowHeight)) {
+      // Use actualContainerHeight instead of prop
+      if (currentHeight > scrollTop + actualContainerHeight + (overscan * normalRowHeight)) {
         endIndex = i;
         break;
       }
@@ -58,7 +85,7 @@ function LogTableComponent({ logs, rowHeight = 24, containerHeight = 600, oversc
       visibleStartIndex: Math.max(0, startIndex),
       visibleEndIndex: Math.min(logs.length, endIndex)
     };
-  }, [scrollTop, containerHeight, logs.length, expandedIndex, normalRowHeight, expandedRowHeight, overscan]);
+  }, [scrollTop, actualContainerHeight, logs.length, expandedIndex, normalRowHeight, expandedRowHeight, overscan]);
 
   // Get visible items
   const visibleItems = logs.slice(visibleStartIndex, visibleEndIndex);
@@ -133,17 +160,17 @@ function LogTableComponent({ logs, rowHeight = 24, containerHeight = 600, oversc
           container.scrollTop = totalHeight;
           break;
         case 'PageUp':
-          container.scrollTop = Math.max(0, container.scrollTop - containerHeight);
+          container.scrollTop = Math.max(0, container.scrollTop - actualContainerHeight);
           break;
         case 'PageDown':
-          container.scrollTop = Math.min(totalHeight, container.scrollTop + containerHeight);
+          container.scrollTop = Math.min(totalHeight, container.scrollTop + actualContainerHeight);
           break;
       }
     };
 
     container.addEventListener('keydown', handleKeyDown);
     return () => container.removeEventListener('keydown', handleKeyDown);
-  }, [totalHeight, containerHeight]);
+  }, [totalHeight, actualContainerHeight]);
 
   return (
     <div className={styles.virtualizedContainer}>
@@ -160,7 +187,6 @@ function LogTableComponent({ logs, rowHeight = 24, containerHeight = 600, oversc
         ref={containerRef}
         className={styles.scrollContainer}
         onScroll={handleScroll}
-        style={{ height: containerHeight }}
         tabIndex={0}
       >
         {/* Virtual spacer to maintain scroll height */}
