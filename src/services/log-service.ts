@@ -6,21 +6,28 @@ export interface StreamingOptions {
 
 export class LogService {
   private readonly decoder = new TextDecoder();
-  private buffer = '';
 
-  private processChunk(chunk: string): LogEntry[] {
+  private processChunk(buffer: string, chunk: string): { logs: LogEntry[], newBuffer: string } {
     const logs: LogEntry[] = [];
 
+    // Handle empty chunks
+    if (!chunk) {
+      return { logs, newBuffer: buffer };
+    }
+
     // Append chunk to buffer
-    this.buffer += chunk;
+    let workingBuffer = buffer + chunk;
 
-    // Split by newlines
-    const lines = this.buffer.split('\n');
+    // Split by newlines (handle both \n and \r\n)
+    const lines = workingBuffer.split(/\r?\n/);
 
-    // Keep the last incomplete line in the buffer
-    this.buffer = lines[lines.length - 1];
+    // The last element is either:
+    // - An empty string (if chunk ended with newline)
+    // - A partial line (if chunk didn't end with newline)
+    // Either way, keep it for the next chunk
+    const newBuffer = lines[lines.length - 1];
 
-    // Process all complete lines
+    // Process all complete lines (everything except the last element)
     for (let i = 0; i < lines.length - 1; i++) {
       const log = this.parseLine(lines[i]);
       if (log) {
@@ -28,7 +35,7 @@ export class LogService {
       }
     }
 
-    return logs;
+    return { logs, newBuffer };
   }
 
   private parseLine(line: string): LogEntry | null {
@@ -48,24 +55,26 @@ export class LogService {
     const stream = await this.getLogsStream(url);
     const reader = stream.getReader();
 
+    let buffer = '';
+
     try {
       while (true) {
         const { done, value } = await reader.read();
 
         if (done) {
           // Process any remaining buffer data
-          if (this.buffer.trim()) {
-            const finalLog = this.parseLine(this.buffer);
+          if (buffer.trim()) {
+            const finalLog = this.parseLine(buffer);
             if (finalLog) {
               options.onChunk([finalLog]);
             }
-            this.buffer = '';
           }
           break;
         }
 
         const chunk = this.decoder.decode(value, { stream: true });
-        const logs = this.processChunk(chunk);
+        const { logs, newBuffer } = this.processChunk(buffer, chunk);
+        buffer = newBuffer;
 
         if (logs.length > 0) {
           options.onChunk(logs);
@@ -76,7 +85,6 @@ export class LogService {
       throw error;
     } finally {
       reader.releaseLock();
-      this.buffer = ''; // Clear buffer on completion or error
     }
   }
 
